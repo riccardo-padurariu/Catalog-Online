@@ -97,6 +97,8 @@ public:
 vector<Student> students;
 
 void displayStudents(){
+    if(students.size() == 0)
+        cout << "There is no student added" << '\n';
     for(int i=0;i<students.size();i++)
         cout << i+1 << ". " << students[i].getName() << " " << students[i].getSurname() << " " << students[i].getId() << " " << students[i].getGrade() << " " << students[i].getYear() << " " << students[i].getStatus() << '\n';
 }
@@ -138,11 +140,11 @@ void deleteStudent(){
                 students[j] = students[j+1];
         }
     }
+    students.pop_back();
     if(ok)
         cout << "Student deleted succesfully" << '\n';
     else
         cout << "The ID doesn't exist" << '\n';
-/* Tomorrow I have to sort the students in classes and then delete the respective id */
 }
 
 void displayTeachers(){
