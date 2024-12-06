@@ -91,16 +91,32 @@ public:
     string getStatus(){
         return Status;
     }
+
+    void display(){
+        cout << getName() << " " << getSurname() << " ID: " << getId() << ", Grade: " << getGrade() << ", Year: " << getYear() << " Status: " << getStatus() << '\n';
+    }
 };
 
 // The students array
 vector<Student> students;
+// The classes array
+vector<string> classes;
 
 void displayStudents(){
     if(students.size() == 0)
         cout << "There is no student added" << '\n';
-    for(int i=0;i<students.size();i++)
-        cout << i+1 << ". " << students[i].getName() << " " << students[i].getSurname() << " " << students[i].getId() << " " << students[i].getGrade() << " " << students[i].getYear() << " " << students[i].getStatus() << '\n';
+    for(int i=0;i<students.size();i++){
+        cout << i+1 << ". ";
+        students[i].display();
+    }
+}
+
+bool exists(string val,vector<string> s){
+    for(auto i : s){
+        if(i == val)
+            return true;
+    }
+    return false;
 }
 
 void addStudent(){
@@ -124,27 +140,34 @@ void addStudent(){
     cout << "Enter grade: ";
     cin >> grade;
     Student s = Student(name,surname,gender,password,id,age,grade,year);
+    s.setStatus();
     students.push_back(s);
+    if(!exists(s.getYear(),classes))
+        classes.push_back(s.getYear());
     cout << "Student succesfully added" << '\n';
 }
 
 void deleteStudent(){
-    cout << "Enter the id you want to delete: ";
-    int id;
-    bool ok = false;
-    cin >> id;
-    for(int i=0;i<students.size();i++){
-        if(students[i].getId() == id){
-            ok = true;
-            for(int j=i;j<students.size()-1;j++)
-                students[j] = students[j+1];
+    if(students.size() == 0)
+        cout << "There is no student to delete" << '\n';
+    else{
+        cout << "Enter the id you want to delete: ";
+        int id;
+        bool ok = false;
+        cin >> id;
+        for(int i=0;i<students.size();i++){
+            if(students[i].getId() == id){
+                ok = true;
+                for(int j=i;j<students.size()-1;j++)
+                    students[j] = students[j+1];
+            }
         }
+        students.pop_back();
+        if(ok)
+            cout << "Student deleted succesfully" << '\n';
+        else
+            cout << "The ID doesn't exist" << '\n';
     }
-    students.pop_back();
-    if(ok)
-        cout << "Student deleted succesfully" << '\n';
-    else
-        cout << "The ID doesn't exist" << '\n';
 }
 
 void displayTeachers(){
@@ -160,7 +183,13 @@ void deleteTeacher(){
 }
 
 void displayClasses(){
-
+    for(auto i : classes){
+        cout << i << '\n';
+        for(auto j : students){
+            if(j.getYear() == i)
+                j.display();
+        }
+    }
 }
 
 int main()
