@@ -155,31 +155,36 @@ bool exists(string val,vector<string> s){
 }
 
 void addStudent(){
-    string name,surname,gender,password,year;
-    int id,age;
-    double grade;
-    cout << "Enter name: ";
-    cin >> name;
-    cout << "Enter surname: ";
-    cin >> surname;
-    cout << "Enter gender: ";
-    cin >> gender;
-    cout << "Enter password: ";
-    cin >> password;
-    cout << "Enter year: ";
-    cin >> year;
-    cout << "Enter id: ";
-    cin >> id;
-    cout << "Enter age: ";
-    cin >> age;
-    cout << "Enter grade: ";
-    cin >> grade;
-    Student s = Student(name,surname,gender,password,id,age,grade,year);
-    s.setStatus();
-    students.push_back(s);
-    if(!exists(s.getYear(),classes))
-        classes.push_back(s.getYear());
-    cout << "Student succesfully added" << '\n';
+    cout << "How many students do you want to add?" << '\n';
+    int number;
+    cin >> number;
+    for(int i=1;i<=number;i++){
+        string name,surname,gender,password,year;
+        int id,age;
+        double grade;
+        cout << "Enter name: ";
+        cin >> name;
+        cout << "Enter surname: ";
+        cin >> surname;
+        cout << "Enter gender: ";
+        cin >> gender;
+        cout << "Enter password: ";
+        cin >> password;
+        cout << "Enter year: ";
+        cin >> year;
+        cout << "Enter id: ";
+        cin >> id;
+        cout << "Enter age: ";
+        cin >> age;
+        cout << "Enter grade: ";
+        cin >> grade;
+        Student s = Student(name,surname,gender,password,id,age,grade,year);
+        s.setStatus();
+        students.push_back(s);
+        if(!exists(s.getYear(),classes))
+            classes.push_back(s.getYear());
+        cout << "Student succesfully added" << '\n';
+    }
 }
 
 void deleteStudent(){
@@ -215,6 +220,16 @@ void displayTeachers(){
     }
 }
 
+/*Function to prevent adding two main teacher to the same class*/
+bool existsTeacher(string val){
+    for(auto i : teachers){
+        if(i.getMainClass() == val)
+            return true;
+    }
+    return false;
+}
+
+
 void addTeacher(){
     string name,surname,gender,password,mainclass,subject;
     int id,age;
@@ -228,6 +243,10 @@ void addTeacher(){
     cin >> password;
     cout << "Enter main class: ";
     cin >> mainclass;
+    while(existsTeacher(mainclass)){
+        cout << "Main teacher to this class already exists.Please enter another class: ";
+        cin >> mainclass;
+    }
     cout << "Enter id: ";
     cin >> id;
     cout << "Enter age: ";
