@@ -97,10 +97,45 @@ public:
     }
 };
 
+/*
+    Creating the Teacher class using Inheritance
+*/
+class Teacher : public User {
+private:
+    string MainClass,Subject;
+public:
+    //Teacher constructor
+    Teacher(string name,string surname,string gender,string password,int id,int age,string mainclass,string subject)
+        :User(name,surname,gender,password,id,age){
+            MainClass = mainclass;
+            Subject = subject;
+        }
+
+    void setMainClass(string mainclass){
+        MainClass = mainclass;
+    }
+    string getMainClass(){
+        return MainClass;
+    }
+    void setSubject(string subject){
+        Subject = subject;
+    }
+    string getSubject(){
+        return Subject;
+    }
+
+    void display(){
+        cout << getName() << " " << getSurname() << " ID: " << getId() << ", Main class: " << getMainClass() << ", Subject: " << getSubject() << '\n';
+    }
+};
+
+
 // The students array
 vector<Student> students;
 // The classes array
 vector<string> classes;
+//The teachers array
+vector<Teacher> teachers;
 
 void displayStudents(){
     if(students.size() == 0)
@@ -170,21 +205,76 @@ void deleteStudent(){
     }
 }
 
-void displayTeachers(){
 
+void displayTeachers(){
+    if(teachers.size() == 0)
+        cout << "There is no teacher added" << '\n';
+    for(int i=0;i<teachers.size();i++){
+        cout << i+1 << ". ";
+        teachers[i].display();
+    }
 }
 
 void addTeacher(){
-
+    string name,surname,gender,password,mainclass,subject;
+    int id,age;
+    cout << "Enter name: ";
+    cin >> name;
+    cout << "Enter surname: ";
+    cin >> surname;
+    cout << "Enter gender: ";
+    cin >> gender;
+    cout << "Enter password: ";
+    cin >> password;
+    cout << "Enter main class: ";
+    cin >> mainclass;
+    cout << "Enter id: ";
+    cin >> id;
+    cout << "Enter age: ";
+    cin >> age;
+    cout << "Enter subject: ";
+    cin >> subject;
+    Teacher t = Teacher(name,surname,gender,password,id,age,mainclass,subject);
+    teachers.push_back(t);
+    cout << "Teacher succesfully added" << '\n';
 }
 
 void deleteTeacher(){
+    if(teachers.size() == 0)
+        cout << "There is no teacher to delete" << '\n';
+    else{
+        cout << "Enter the id you want to delete: ";
+        int id;
+        bool ok = false;
+        cin >> id;
+        for(int i=0;i<teachers.size();i++){
+            if(teachers[i].getId() == id){
+                ok = true;
+                for(int j=i;j<teachers.size()-1;j++)
+                    teachers[j] = teachers[j+1];
+            }
+        }
+        teachers.pop_back();
+        if(ok)
+            cout << "Teacher deleted succesfully" << '\n';
+        else
+            cout << "The ID doesn't exist" << '\n';
+    }
+}
 
+/*Function to find the main teacher of a class*/
+string findTeacher(string mainclass){
+    for(auto i : teachers){
+        if(i.getMainClass() == mainclass)
+            return i.getName() + " " + i.getSurname();
+    }
+    return "Doesn't exist";
 }
 
 void displayClasses(){
     for(auto i : classes){
-        cout << i << '\n';
+        cout << i << ": " << '\n';
+        cout << "Main teacher: " << findTeacher(i) << '\n';
         for(auto j : students){
             if(j.getYear() == i)
                 j.display();
